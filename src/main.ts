@@ -1,6 +1,5 @@
 import { ViteSSG } from 'vite-ssg'
 import AnimateOnScroll from 'primevue/animateonscroll'
-import Ripple from 'primevue/ripple'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
@@ -21,7 +20,6 @@ export const createApp = ViteSSG(
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
     ctx.app.directive('animateonscroll', AnimateOnScroll)
-    ctx.app.directive('ripple', Ripple)
     // ctx.app.use(Previewer)
     // if (isDark.value)
     // import('primevue/resources/themes/aura-dark-purple/theme.css')
