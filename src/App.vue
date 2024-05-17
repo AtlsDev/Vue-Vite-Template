@@ -1,37 +1,43 @@
 <script setup lang="ts">
-// import primeAuraDarkPurple from 'primevue/resources/themes/aura-dark-purple/theme.css'
-// import primeAuraLightPurple from 'primevue/resources/themes/aura-dark-purple/theme.css'
+import DynamicDialog from 'primevue/dynamicdialog'
+import Toast from 'primevue/Toast'
+import ConfirmDialog from 'primevue/ConfirmDialog'
 
 useHead({
   title: 'Temp',
+  htmlAttrs: { class: appMode.value },
   meta: [
     {
       name: 'description',
-      content: 'Opinionated Vite Starter Template',
+      content: 'template',
     },
     {
-      name: 'theme-color',
-      content: () => isDark.value ? '#00aba9' : '#ffffff',
+      name: 'app-mode',
+      content: computed(() => appMode.value),
     },
   ],
   link: [
     {
       rel: 'icon',
       type: 'image/svg+xml',
-      // href: () => preferredDark.value ? '/favicon-dark.svg' : '/favicon.svg',
+      href: () => isDark.value ? '/src/assets/icons/svg/dark-vue.svg' : '/src/assets/icons/svg/light-vue.svg',
     },
+    ...themeLinks,
   ],
 })
 </script>
 
 <template>
-  <div class="h-4rem">
+  <Toast />
+  <ConfirmDialog />
+  <DynamicDialog />
+  <header>
     <TheHeader />
-  </div>
-  <div>
+  </header>
+  <routerSide>
     <RouterView />
-  </div>
-  <div class="h-4rem">
+  </routerSide>
+  <!-- <footer>
     <TheFooter />
-  </div>
+  </footer> -->
 </template>

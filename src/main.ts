@@ -1,30 +1,34 @@
-import { ViteSSG } from 'vite-ssg'
-import AnimateOnScroll from 'primevue/animateonscroll'
+import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import { setupLayouts } from 'virtual:generated-layouts'
-import { routes } from 'vue-router/auto-routes'
+import { createI18n } from 'vue-i18n'
 import App from './App.vue'
-import type { UserModule } from './types'
+import type { RVModule } from '~/core/types'
+import generatedRoutes from '~pages'
 
-// import '@unocss/reset/tailwind.css'
-import './assets/styles/main.css'
-import 'uno.css'
+export const app = createApp(App)
+const routes = setupLayouts(generatedRoutes)
+export const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
+})
 
-export const createApp = ViteSSG(
-  App,
-  {
-    routes: setupLayouts(routes),
-    base: import.meta.env.BASE_URL,
-  },
-  (ctx) => {
-    // install all modules under `modules/`
-    Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
-      .forEach(i => i.install?.(ctx))
-    ctx.app.directive('animateonscroll', AnimateOnScroll)
-    // ctx.app.use(Previewer)
-    // if (isDark.value)
-    // import('primevue/resources/themes/aura-dark-purple/theme.css')
-    // else
-    //   import('primevue/resources/themes/aura-light-purple/theme.css')
-  },
-
+export const messages = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<{ default: any }>('/locales/*.y(a)?ml', { eager: true }))
+    .map(([key, value]) => {
+      const yaml = key.endsWith('.yaml')
+      return [key.slice(9, yaml ? -5 : -4), value.default]
+    }),
 )
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'tr',
+  messages,
+})
+
+Object.values(import.meta.glob<{ install: RVModule }>('./core/modules/*.ts', { eager: true }))
+  .forEach(i => i.install?.({ app, router, i18n }))
+
+app.mount('#app')
