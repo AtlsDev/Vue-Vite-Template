@@ -16,7 +16,7 @@
   "dependencies": {
     "@vueuse/core": "^9.11.0",
     "@vueuse/head": "^2.0.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "chart.js": "^4.4.0",
     "devextreme": "22.2.3",
     "devextreme-aspnet-data-nojquery": "^2.9.0",
